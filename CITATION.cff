@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: "AI-assisted SGS Discovery"
+message: "If you use this code or data products, please cite the associated manuscript and this repository."
+type: software
+authors:
+  - name: "AI-assisted SGS Discovery authors"
+repository-code: "https://github.com/Amordia/ai-assisted-sgs-discovery"
+date-released: "2026-03-15"
+license: MIT

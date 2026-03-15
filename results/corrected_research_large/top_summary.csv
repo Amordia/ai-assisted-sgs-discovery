@@ -1,0 +1,3 @@
+summary,model,known_match,balanced_score,channel_score,mean_r_iso,mean_r_chan,tau12_r_chan,pi_r_chan,wall_tau12_corr_chan,rollout_rmse_final,teacher_rhs_rmse_mean,rollout_energy_rel_mean,final_spectrum_corr
+best_apriori_candidate,search_07,,0.25861445291219715,0.41650988950614615,0.07881240403412645,0.15689862720515205,0.2207821762002626,0.39726061732368617,0.9519472451182127,,,,
+best_solver_candidate,search_07,,,,,,,,,0.010993676782329148,1.1611135845112088,0.00024910769195852356,0.9999999638715881

@@ -1,0 +1,65 @@
+.env
+.DS_Store
+**/.DS_Store
+.vscode/
+__pycache__/
+*.py[cod]
+.vendor_git_backup/
+
+# Raw and cached turbulence data
+*.h5
+
+# Local logs and scratch outputs
+*.log
+*.pid
+main_pid.txt
+output*.log
+results/generated_figures/
+results/*.csv
+results/*.pdf
+tmp_*.csv
+tmp_*.h5
+tmp_*
+
+# Legacy or exploratory outputs not used by the final paper
+results_*/
+results/corrected_research_large/search_candidates_raw.csv
+results/aposteriori_channel/channel_rollout_summary.csv
+results/aposteriori_channel/channel_rollout_pchip_summary.csv
+results/aposteriori_channel/channel_rollout_no_model_probe.csv
+results/aposteriori_channel/channel_rollout_no_model_probe4.csv
+results/aposteriori_channel/*probe*.csv
+
+# Vendored demo bundles
+src/sgs_discovery/vendor/giverny/DEMO_notebooks/
+src/sgs_discovery/vendor/giverny/.github/
+src/sgs_discovery/vendor/giverny/docs/
+src/sgs_discovery/vendor/giverny/givernymatlab/
+src/sgs_discovery/vendor/giverny/CHANGELOG.md
+src/sgs_discovery/vendor/giverny/.gitignore
+
+# LaTeX build products
+*.aux
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.toc
+*.synctex.gz
+
+# One-off debugging scripts
+test_parse.py
+test_parse2.py
+test_parse3.py
+test_parse4.py
+test_parse5.py
+test_opt_bug.py
+test_laps.py
+test_ldelta.py
+evaluate_champion.py
+visualize_results.py
+
+# Local manuscript exports and unrelated notes
+极端星系的“广义径向加速度关系” (Generalized RAR) 发现.md

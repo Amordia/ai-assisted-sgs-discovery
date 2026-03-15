@@ -1,0 +1,5 @@
+objective,r_tau_iso,r_tau_chan,nmse_chan,r_pi_chan,r_wall_tau12
+NMSE only,0.300,0.298,1.046,0.607,-0.587
+NMSE + backscatter,0.300,0.298,1.045,0.607,-0.587
+NMSE + dissipation,0.300,0.297,1.045,0.607,-0.587
+Full objective,0.300,0.297,1.045,0.607,-0.587

@@ -1,0 +1,391 @@
+{
+  "project": "AI-assisted SGS discovery",
+  "required_inputs": [
+    "jhtdb_u_tensor_64.h5",
+    "channel_u_tensor_64.h5",
+    "jhtdb_u_tensor_64_shifted.h5",
+    "channel_u_tensor_64_shifted.h5",
+    "jhtdb_u_tensor_64_future.h5",
+    "channel_u_tensor_64_future.h5",
+    "jhtdb_u_tensor_64_future_shifted.h5",
+    "channel_u_tensor_64_future_shifted.h5",
+    "jhtdb_u_tensor_64_coarse_ood.h5",
+    "jhtdb_u_tensor_64_4096_ood.h5",
+    "channel5200_u_tensor_64_ood.h5",
+    "channel5200_u_tensor_64_ood_shifted.h5",
+    "jhtdb_u_tensor_64_periodic.h5",
+    "jhtdb_u_tensor_64_periodic_rollout.h5",
+    "channel_fullheight_u_tensor_64_rollout7_pchip.h5"
+  ],
+  "steps": [
+    {
+      "name": "regression_nonuniform_gradients",
+      "group": "tests",
+      "command": ["python", "tests/test_nonuniform_gradients.py"]
+    },
+    {
+      "name": "download_isotropic_train",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_jhtdb.py"],
+      "outputs": ["jhtdb_u_tensor_64.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_channel_train",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_channel.py"],
+      "outputs": ["channel_u_tensor_64.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_shifted_cutouts",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_additional_cutouts.py"],
+      "outputs": ["jhtdb_u_tensor_64_shifted.h5", "channel_u_tensor_64_shifted.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_temporal_cutouts",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_temporal_cutouts.py"],
+      "outputs": [
+        "jhtdb_u_tensor_64_future.h5",
+        "channel_u_tensor_64_future.h5",
+        "jhtdb_u_tensor_64_future_shifted.h5",
+        "channel_u_tensor_64_future_shifted.h5"
+      ],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_isotropic_ood_cutouts",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_isotropic_ood_cutouts.py"],
+      "outputs": ["jhtdb_u_tensor_64_coarse_ood.h5", "jhtdb_u_tensor_64_4096_ood.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_channel5200_cutouts",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_channel5200_cutouts.py"],
+      "outputs": ["channel5200_u_tensor_64_ood.h5", "channel5200_u_tensor_64_ood_shifted.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_periodic_box",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_isotropic_periodic_box.py"],
+      "outputs": ["jhtdb_u_tensor_64_periodic.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_periodic_rollout",
+      "group": "downloads",
+      "command": ["python", "scripts/download/download_isotropic_periodic_rollout.py"],
+      "outputs": ["jhtdb_u_tensor_64_periodic_rollout.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "download_channel_rollout_pchip",
+      "group": "downloads",
+      "command": [
+        "python",
+        "scripts/download/download_channel_fullheight_rollout.py",
+        "--time-dt",
+        "0.003",
+        "--num-frames",
+        "7",
+        "--temporal-method",
+        "pchip",
+        "--out",
+        "channel_fullheight_u_tensor_64_rollout7_pchip.h5"
+      ],
+      "outputs": ["channel_fullheight_u_tensor_64_rollout7_pchip.h5"],
+      "requires_env": ["JHTDB_AUTH_TOKEN"]
+    },
+    {
+      "name": "benchmark_native_models",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/benchmark_models.py"],
+      "outputs": ["results/baselines/summary_metrics.csv", "results/baselines/component_metrics.csv"]
+    },
+    {
+      "name": "benchmark_holdout",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/holdout_benchmark.py"],
+      "outputs": ["results/holdout/blocked_holdout_summary.csv", "results/holdout/blocked_holdout_folds.csv"]
+    },
+    {
+      "name": "benchmark_shifted_transfer",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/external_cutout_benchmark.py"],
+      "outputs": ["results/external_cutout/shifted_cutout_summary.csv"]
+    },
+    {
+      "name": "benchmark_temporal_transfer",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/temporal_transfer_benchmark.py"],
+      "outputs": ["results/temporal_transfer/temporal_transfer_summary.csv"]
+    },
+    {
+      "name": "benchmark_filter_transfer",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/filter_width_transfer.py"],
+      "outputs": ["results/filter_transfer/filter_width_transfer_summary.csv"]
+    },
+    {
+      "name": "benchmark_isotropic_ood",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/isotropic_ood_benchmark.py"],
+      "outputs": ["results/isotropic_ood/isotropic_ood_summary.csv"]
+    },
+    {
+      "name": "benchmark_channel5200_ood",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/channel5200_ood_benchmark.py"],
+      "outputs": ["results/channel5200_ood/channel5200_transfer_summary.csv"]
+    },
+    {
+      "name": "benchmark_modern_baselines",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/benchmark_modern_baselines.py"],
+      "outputs": ["results/modern_baselines/apriori_summary.csv"]
+    },
+    {
+      "name": "corrected_research_screen",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/corrected_research_screen.py"],
+      "outputs": [
+        "results/corrected_research_large/search_runs.csv",
+        "results/corrected_research_large/apriori_screen.csv",
+        "results/corrected_research_large/solver_screen.csv",
+        "results/corrected_research_large/top_summary.csv"
+      ]
+    },
+    {
+      "name": "corrected_candidate_scan",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/corrected_candidate_scan.py"],
+      "outputs": ["results/corrected_scan/candidate_scan_summary.csv"]
+    },
+    {
+      "name": "corrected_search_probe",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/corrected_search_probe.py"],
+      "outputs": ["results/corrected_search/probe_top_models.csv"]
+    },
+    {
+      "name": "cross_flow_seed_study",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/cross_flow_seed_study.py"],
+      "outputs": [
+        "results/cross_flow/cross_flow_seed_summary.csv",
+        "results/cross_flow/champion_coeff_summary.csv"
+      ]
+    },
+    {
+      "name": "objective_ablation",
+      "group": "benchmarks",
+      "command": ["python", "scripts/benchmarks/objective_ablation.py"],
+      "outputs": ["results/objective_ablation/objective_ablation_summary.csv"]
+    },
+    {
+      "name": "aposteriori_isotropic_short_horizon",
+      "group": "solver",
+      "command": ["python", "scripts/solver/aposteriori_isotropic_les.py"],
+      "outputs": ["results/aposteriori_isotropic/isotropic_short_horizon_summary.csv"]
+    },
+    {
+      "name": "aposteriori_isotropic_rollout",
+      "group": "solver",
+      "command": ["python", "scripts/solver/aposteriori_isotropic_rollout.py"],
+      "outputs": ["results/aposteriori_rollout/isotropic_rollout_summary.csv"]
+    },
+    {
+      "name": "aposteriori_channel_rollout_4frames",
+      "group": "solver",
+      "command": [
+        "python",
+        "scripts/solver/aposteriori_channel_rollout.py",
+        "--h5",
+        "channel_fullheight_u_tensor_64_rollout7_pchip.h5",
+        "--out",
+        "results/aposteriori_channel/channel_rollout_pchip_summary_4frames.csv",
+        "--max-frames",
+        "4",
+        "--substeps",
+        "2",
+        "--calib-steps",
+        "2"
+      ],
+      "outputs": ["results/aposteriori_channel/channel_rollout_pchip_summary_4frames.csv"]
+    },
+    {
+      "name": "commutation_error_study",
+      "group": "checks",
+      "command": ["python", "scripts/benchmarks/commutation_error_study.py"],
+      "outputs": [
+        "results/commutation/commutation_summary.csv",
+        "results/commutation/channel_commutation_profiles.csv",
+        "results/commutation/commutation_profiles.pdf"
+      ]
+    },
+    {
+      "name": "proposal_channel_ablation",
+      "group": "checks",
+      "command": ["python", "scripts/benchmarks/proposal_channel_ablation.py"],
+      "outputs": [
+        "results/llm_ablation/search_rows.csv",
+        "results/llm_ablation/search_summary.csv"
+      ],
+      "requires_env": ["GEMINI_API_KEY"]
+    },
+    {
+      "name": "subsample_sensitivity",
+      "group": "checks",
+      "command": ["python", "scripts/benchmarks/subsample_sensitivity.py"],
+      "outputs": [
+        "results/subsample_sensitivity/ratio_sweep_rows.csv",
+        "results/subsample_sensitivity/ratio_sweep_summary.csv",
+        "results/subsample_sensitivity/subsample_stability.pdf"
+      ]
+    },
+    {
+      "name": "build_comparison_pack",
+      "group": "figures",
+      "command": ["python", "scripts/figures/build_postfix_comparison_pack.py"],
+      "outputs": [
+        "results/comparison_post_dimensional_fix/figures/fig_channel_physical_updated.pdf",
+        "results/comparison_post_dimensional_fix/figures/fig_validation_map_updated.pdf",
+        "results/comparison_post_dimensional_fix/figures/fig_solver_screen_updated.pdf",
+        "results/comparison_post_dimensional_fix/tables/tab_baseline_updated.csv"
+      ]
+    }
+  ],
+  "artifacts": {
+    "results/baselines/summary_metrics.csv": {
+      "type": "csv",
+      "required_columns": ["model", "constants", "mean_r_iso", "mean_r_chan", "tau12_r_chan", "pi_r_iso", "pi_r_chan", "wall_tau12_corr_chan"],
+      "min_rows": 9
+    },
+    "results/baselines/component_metrics.csv": {
+      "type": "csv",
+      "required_columns": ["model", "dataset", "r_11", "r_22", "r_33", "r_12", "r_13", "r_23"],
+      "min_rows": 18
+    },
+    "results/holdout/blocked_holdout_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "mean_r_chan_test_mean", "tau12_r_chan_test_mean", "pi_r_chan_test_mean", "wall_tau12_corr_chan_test_mean"],
+      "min_rows": 7
+    },
+    "results/external_cutout/shifted_cutout_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "mean_r_chan_shifted", "tau12_r_chan_shifted", "pi_r_chan_shifted", "wall_tau12_corr_chan_shifted"],
+      "min_rows": 7
+    },
+    "results/temporal_transfer/temporal_transfer_summary.csv": {
+      "type": "csv",
+      "required_columns": ["case", "model", "mean_r_chan_transfer", "tau12_r_chan_transfer", "pi_r_chan_transfer", "wall_tau12_corr_chan_transfer"],
+      "min_rows": 14
+    },
+    "results/filter_transfer/filter_width_transfer_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "test_sigma", "mean_r_chan_transfer", "tau12_r_chan_transfer", "pi_r_chan_transfer", "wall_tau12_corr_chan_transfer"],
+      "min_rows": 14
+    },
+    "results/isotropic_ood/isotropic_ood_summary.csv": {
+      "type": "csv",
+      "required_columns": ["case", "model", "nmse_iso_transfer", "mean_r_iso_transfer", "r12_iso_transfer", "pi_r_iso_transfer"],
+      "min_rows": 14
+    },
+    "results/channel5200_ood/channel5200_transfer_summary.csv": {
+      "type": "csv",
+      "required_columns": ["case", "model", "nmse_transfer", "mean_r_transfer", "r12_transfer", "pi_r_transfer", "wall_tau12_corr_transfer"],
+      "min_rows": 14
+    },
+    "results/modern_baselines/apriori_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "family", "mean_r_chan", "tau12_r_chan", "pi_r_chan", "wall_tau12_corr_chan"],
+      "min_rows": 14
+    },
+    "results/aposteriori_rollout/isotropic_rollout_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "n_frames", "teacher_rhs_rmse_mean", "rollout_rmse_final", "final_spectrum_corr", "status"],
+      "min_rows": 8
+    },
+    "results/aposteriori_channel/channel_rollout_pchip_summary_4frames.csv": {
+      "type": "csv",
+      "required_columns": ["model", "n_frames", "teacher_rhs_rmse_mean", "rollout_rmse_final", "final_profile_corr", "final_div_rms", "status"],
+      "min_rows": 8
+    },
+    "results/aposteriori_isotropic/isotropic_short_horizon_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "rhs_rmse", "closure_div_rmse", "spectrum_corr", "status"],
+      "min_rows": 8
+    },
+    "results/corrected_research_large/search_runs.csv": {
+      "type": "csv",
+      "required_columns": ["root", "seed", "best_search_loss", "best_expr", "tree_size"],
+      "min_rows": 10
+    },
+    "results/corrected_research_large/apriori_screen.csv": {
+      "type": "csv",
+      "required_columns": ["model", "expr", "refit_loss", "mean_r_chan", "pi_r_chan", "wall_tau12_corr_chan", "balanced_score"],
+      "min_rows": 10
+    },
+    "results/corrected_research_large/solver_screen.csv": {
+      "type": "csv",
+      "required_columns": ["model", "rollout_rmse_final", "teacher_rhs_rmse_mean", "final_spectrum_corr"],
+      "min_rows": 4
+    },
+    "results/corrected_research_large/top_summary.csv": {
+      "type": "csv",
+      "required_columns": ["summary", "model", "balanced_score", "channel_score"],
+      "min_rows": 2
+    },
+    "results/corrected_scan/candidate_scan_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "expr", "loss", "mean_r_chan", "pi_r_chan", "wall_tau12_corr_chan", "balanced_score"],
+      "min_rows": 10
+    },
+    "results/corrected_search/probe_top_models.csv": {
+      "type": "csv",
+      "required_columns": ["rank", "loss", "constants", "expr"],
+      "min_rows": 5
+    },
+    "results/cross_flow/cross_flow_seed_summary.csv": {
+      "type": "csv",
+      "required_columns": ["regime", "model", "mean_r_iso_mean", "mean_r_chan_mean", "pi_r_chan_mean", "wall_tau12_corr_chan_mean"],
+      "min_rows": 15
+    },
+    "results/cross_flow/champion_coeff_summary.csv": {
+      "type": "csv",
+      "required_columns": ["regime", "c1_mean", "c2_mean", "c3_mean", "ppn_sign_pattern_frac"],
+      "min_rows": 3
+    },
+    "results/objective_ablation/objective_ablation_summary.csv": {
+      "type": "csv",
+      "required_columns": ["objective", "mean_r_chan_mean", "pi_r_chan_mean", "pi_bias_chan_mean", "wall_tau12_corr_chan_mean"],
+      "min_rows": 4
+    },
+    "results/commutation/commutation_summary.csv": {
+      "type": "csv",
+      "required_columns": ["dataset", "operator", "comm_rms", "ref_rms", "relative_rms"],
+      "min_rows": 12
+    },
+    "results/commutation/channel_commutation_profiles.csv": {
+      "type": "csv",
+      "required_columns": ["y", "grad_dy", "strain", "laplacian_strain"],
+      "min_rows": 64
+    },
+    "results/llm_ablation/search_summary.csv": {
+      "type": "csv",
+      "required_columns": ["channel", "n_runs", "runtime_s_mean", "best_search_loss_mean", "llm_success_fraction"],
+      "min_rows": 2
+    },
+    "results/subsample_sensitivity/ratio_sweep_summary.csv": {
+      "type": "csv",
+      "required_columns": ["model", "ratio", "mean_r_chan_mean", "wall_tau12_corr_chan_mean", "coverage_q010_chan_mean"],
+      "min_rows": 12
+    }
+  }
+}

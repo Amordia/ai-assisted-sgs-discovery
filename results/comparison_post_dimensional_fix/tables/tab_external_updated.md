@@ -1,0 +1,9 @@
+| database | model | r_tau_ood | r_pi_ood | r_tau12_ood | r_wall_tau12_ood |
+| --- | --- | --- | --- | --- | --- |
+| iso1024c | Jaumann hybrid | 0.167 | -0.075 | --- | --- |
+| iso1024c | Laplacian-strain hybrid | 0.393 | 0.978 | --- | --- |
+| iso4096 | Jaumann hybrid | 0.120 | 0.091 | --- | --- |
+| iso4096 | Laplacian-strain hybrid | 0.341 | 0.921 | --- | --- |
+| chan5200 | Jaumann hybrid | 0.103 | 0.042 | 0.080 | -0.466 |
+| chan5200 | Vortex-stretching hybrid | 0.013 | -0.240 | -0.036 | 0.390 |
+| chan5200 | Canonical WALE | 0.002 | -0.275 | -0.217 | -0.919 |

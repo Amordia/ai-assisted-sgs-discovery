@@ -1,0 +1,8 @@
+| model | r_tau_iso | r_tau_chan | r_pi_chan | r_wall_tau12 |
+| --- | --- | --- | --- | --- |
+| Bardina/Leonard | 0.183 | 0.161 | 0.129 | 0.160 |
+| Dynamic Smagorinsky | 0.052 | -0.005 | 0.002 | -0.055 |
+| Canonical WALE | -0.009 | -0.093 | -0.389 | -0.950 |
+| AMD | 0.351 | 0.250 | 0.535 | -0.944 |
+| Jaumann hybrid | 0.186 | 0.115 | 0.030 | -0.929 |
+| Vortex-stretching hybrid | -0.037 | -0.049 | -0.542 | -0.158 |

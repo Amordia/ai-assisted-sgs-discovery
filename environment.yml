@@ -1,0 +1,18 @@
+name: fluid
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - numpy=2.0.2
+  - pandas=2.2.3
+  - scipy=1.14.1
+  - sympy=1.13.3
+  - matplotlib=3.9.2
+  - seaborn=0.13.2
+  - networkx=3.3
+  - h5py=3.14.0
+  - requests=2.32.4
+  - ipykernel
+  - llvm-openmp
